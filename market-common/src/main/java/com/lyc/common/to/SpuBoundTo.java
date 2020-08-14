@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Data
 public class SpuBoundTo {
 
-    private long spuId;
+    private Long spuId;
 
     private BigDecimal buyBounds;
 

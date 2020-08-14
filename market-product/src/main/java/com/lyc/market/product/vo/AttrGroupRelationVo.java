@@ -9,8 +9,8 @@ import lombok.Data;
 @Data
 public class AttrGroupRelationVo {
 
-    private long attrId;
-    private long attrGroupId;
+    private Long attrId;
+    private Long attrGroupId;
 
 
 }
