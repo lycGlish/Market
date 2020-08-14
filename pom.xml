@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.lyc.market</groupId>
+    <artifactId>market</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>market</name>
+    <description>聚合服务</description>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>market-common</module>
+        <module>market-coupon</module>
+        <module>market-gateway</module>
+        <module>market-member</module>
+        <module>market-order</module>
+        <module>market-product</module>
+        <module>market-third-party</module>
+        <module>market-ware</module>
+        <module>renren-fast</module>
+        <module>renren-generator</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
