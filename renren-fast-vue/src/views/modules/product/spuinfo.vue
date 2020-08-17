@@ -1,56 +1,86 @@
 <template>
   <div class="mod-config">
-    <el-table
-      :data="dataList"
-      border
-      v-loading="dataListLoading"
-      @selection-change="selectionChangeHandle"
-      style="width: 100%;"
-    >
-      <el-table-column type="selection" header-align="center" align="center" width="50"></el-table-column>
-      <el-table-column prop="id" header-align="center" align="center" label="id"></el-table-column>
-      <el-table-column prop="spuName" header-align="center" align="center" label="名称"></el-table-column>
-      <el-table-column prop="spuDescription" header-align="center" align="center" label="描述"></el-table-column>
-      <el-table-column prop="catalogId" header-align="center" align="center" label="分类"></el-table-column>
-      <el-table-column prop="brandId" header-align="center" align="center" label="品牌"></el-table-column>
-      <el-table-column prop="weight" header-align="center" align="center" label="重量"></el-table-column>
-      <el-table-column prop="publishStatus" header-align="center" align="center" label="上架状态">
+    <el-table :data="dataList"
+              border
+              v-loading="dataListLoading"
+              @selection-change="selectionChangeHandle"
+              style="width: 100%;">
+      <el-table-column type="selection"
+                       header-align="center"
+                       align="center"
+                       width="50"></el-table-column>
+      <el-table-column prop="id"
+                       header-align="center"
+                       align="center"
+                       label="id"></el-table-column>
+      <el-table-column prop="spuName"
+                       header-align="center"
+                       align="center"
+                       label="名称"></el-table-column>
+      <el-table-column prop="spuDescription"
+                       header-align="center"
+                       align="center"
+                       label="描述"></el-table-column>
+      <el-table-column prop="catalogId"
+                       header-align="center"
+                       align="center"
+                       label="分类"></el-table-column>
+      <el-table-column prop="brandId"
+                       header-align="center"
+                       align="center"
+                       label="品牌"></el-table-column>
+      <el-table-column prop="weight"
+                       header-align="center"
+                       align="center"
+                       label="重量"></el-table-column>
+      <el-table-column prop="publishStatus"
+                       header-align="center"
+                       align="center"
+                       label="上架状态">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.publishStatus == 0">新建</el-tag>
           <el-tag v-if="scope.row.publishStatus == 1">已上架</el-tag>
           <el-tag v-if="scope.row.publishStatus == 2">已下架</el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="createTime" header-align="center" align="center" label="创建时间"></el-table-column>
-      <el-table-column prop="updateTime" header-align="center" align="center" label="修改时间"></el-table-column>
-      <el-table-column fixed="right" header-align="center" align="center" width="150" label="操作">
+      <el-table-column prop="createTime"
+                       header-align="center"
+                       align="center"
+                       label="创建时间"></el-table-column>
+      <el-table-column prop="updateTime"
+                       header-align="center"
+                       align="center"
+                       label="修改时间"></el-table-column>
+      <el-table-column fixed="right"
+                       header-align="center"
+                       align="center"
+                       width="150"
+                       label="操作">
         <template slot-scope="scope">
-          <el-button
-            v-if="scope.row.publishStatus == 0"
-            type="text"
-            size="small"
-            @click="productUp(scope.row.id)"
-          >上架</el-button>
-          <el-button type="text" size="small" @click="attrUpdateShow(scope.row)">规格</el-button>
+          <el-button v-if="scope.row.publishStatus == 0"
+                     type="text"
+                     size="small"
+                     @click="productUp(scope.row.id)">上架</el-button>
+          <el-button type="text"
+                     size="small"
+                     @click="attrUpdateShow(scope.row)">规格</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-      :current-page="pageIndex"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      :total="totalPage"
-      layout="total, sizes, prev, pager, next, jumper"
-    ></el-pagination>
+    <el-pagination @size-change="sizeChangeHandle"
+                   @current-change="currentChangeHandle"
+                   :current-page="pageIndex"
+                   :page-sizes="[10, 20, 50, 100]"
+                   :page-size="pageSize"
+                   :total="totalPage"
+                   layout="total, sizes, prev, pager, next, jumper"></el-pagination>
   </div>
 </template>
 
 <script>
 export default {
-  data() {
+  data () {
     return {
       dataSub: null,
       dataForm: {},
@@ -70,11 +100,11 @@ export default {
     }
   },
   components: {},
-  activated() {
+  activated () {
     this.getDataList();
   },
   methods: {
-    productUp(id) {
+    productUp (id) {
       this.$http({
         url: this.$http.adornUrl("/product/spuinfo/" + id + "/up"),
         method: "post"
@@ -93,15 +123,15 @@ export default {
         }
       });
     },
-    attrUpdateShow(row) {
+    attrUpdateShow (row) {
       console.log(row);
       this.$router.push({
-        path: "/product-attrupdate",
+        path: "/prodect-attrupdate",
         query: { spuId: row.id, catalogId: row.catalogId }
       });
     },
     // 获取数据列表
-    getDataList() {
+    getDataList () {
       this.dataListLoading = true;
       let param = {};
       Object.assign(param, this.dataForm, {
@@ -124,31 +154,31 @@ export default {
       });
     },
     // 每页数
-    sizeChangeHandle(val) {
+    sizeChangeHandle (val) {
       this.pageSize = val;
       this.pageIndex = 1;
       this.getDataList();
     },
     // 当前页
-    currentChangeHandle(val) {
+    currentChangeHandle (val) {
       this.pageIndex = val;
       this.getDataList();
     },
     // 多选
-    selectionChangeHandle(val) {
+    selectionChangeHandle (val) {
       this.dataListSelections = val;
     },
     // 新增 / 修改
-    addOrUpdateHandle(id) {}
+    addOrUpdateHandle (id) { }
   },
-  mounted() {
+  mounted () {
     this.dataSub = PubSub.subscribe("dataForm", (msg, val) => {
       console.log("~~~~~", val);
       this.dataForm = val;
       this.getDataList();
     });
   },
-  beforeDestroy() {
+  beforeDestroy () {
     PubSub.unsubscribe(this.dataSub);
   }
 };
