@@ -20,6 +20,7 @@
         <module>market-ware</module>
         <module>renren-fast</module>
         <module>renren-generator</module>
+        <module>market-search</module>
     </modules>
 
     <build>

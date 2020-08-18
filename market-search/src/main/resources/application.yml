@@ -1,0 +1,16 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  application:
+    name: market-search
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+
+server:
+  port: 10001
+
+logging:
+  level:
+    com.lyc.market: debug

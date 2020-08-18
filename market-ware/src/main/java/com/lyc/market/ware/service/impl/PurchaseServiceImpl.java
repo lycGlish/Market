@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.BlockingDeque;
 import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -27,8 +26,6 @@ import com.lyc.market.ware.dao.PurchaseDao;
 import com.lyc.market.ware.entity.PurchaseEntity;
 import com.lyc.market.ware.service.PurchaseService;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.validation.constraints.NotNull;
 
 @Service("purchaseService")
 public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity> implements PurchaseService {
@@ -136,8 +133,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
         Long id = doneVo.getId();
 
-
-        //2、改变采购项的状态
+        // 改变采购项的状态
         Boolean flag = true;
         List<PurchaseItemDoneVo> items = doneVo.getItems();
 
@@ -149,10 +145,9 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
                 detailEntity.setStatus(item.getStatus());
             } else {
                 detailEntity.setStatus(WareConstant.PurchaseDetailStatusEnum.FINISH.getCode());
-                ////3、将成功采购的进行入库
+                // 将成功采购的进行入库
                 PurchaseDetailEntity entity = detailService.getById(item.getItemId());
                 wareSkuService.addStock(entity.getSkuId(), entity.getWareId(), entity.getSkuNum());
-
             }
             detailEntity.setId(item.getItemId());
             updates.add(detailEntity);
@@ -160,7 +155,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseDao, PurchaseEntity
 
         detailService.updateBatchById(updates);
 
-        //1、改变采购单状态
+        // 改变采购单状态
         PurchaseEntity purchaseEntity = new PurchaseEntity();
         purchaseEntity.setId(id);
         purchaseEntity.setStatus(flag ? WareConstant.PurchaseStatusEnum.FINISH.getCode()
