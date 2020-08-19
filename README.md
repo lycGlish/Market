@@ -8,7 +8,7 @@
     market-member         8000        会员模块  
     market-order          9000        订单模块  
     market-product        10000       商品模块  
-    market-searh          0000        搜索模块  
+    market-searh          12000       搜索模块  
     market-third-party    30000       第三方模块  
     market-ware           11000       仓库模块  
     renren-fast           8080        人人开源后台管理模块  
@@ -25,7 +25,7 @@
  * linux(centos7)  
  * docker  
  * mysql  
- * springcloud+springboot  
+ * springboot  
  * gateway  
  * mybatis-plus  
  * nacos  

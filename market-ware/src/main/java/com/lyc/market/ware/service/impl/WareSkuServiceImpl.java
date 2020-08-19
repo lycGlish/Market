@@ -2,12 +2,14 @@ package com.lyc.market.ware.service.impl;
 
 import com.lyc.common.utils.R;
 import com.lyc.market.ware.feign.ProductFeignService;
+import com.lyc.market.ware.vo.SkuHasStockVo;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -65,17 +67,31 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             skuEntity.setStockLocked(0);
             try {
                 R info = productFeignService.info(skuId);
-                Map<String,Object> data = (Map<String, Object>) info.get("data");
-                if(info.getCode() == 0){
+                Map<String, Object> data = (Map<String, Object>) info.get("data");
+                if (info.getCode() == 0) {
                     skuEntity.setSkuName((String) data.get("skuName"));
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             wareSkuDao.insert(skuEntity);
-        }else {
+        } else {
             wareSkuDao.addStock(skuId, wareId, skuNum);
         }
+    }
+
+    @Override
+    public List<SkuHasStockVo> getSkusHasStock(List<Long> skuIds) {
+
+        List<SkuHasStockVo> collect = skuIds.stream().map(skuId -> {
+            SkuHasStockVo vo = new SkuHasStockVo();
+            // 查询当前sku的总库存量
+            Long count = baseMapper.getSkuStock(skuId);
+            vo.setSkuId(skuId);
+            vo.setHasStock(count != null && count > 0);
+            return vo;
+        }).collect(Collectors.toList());
+        return collect;
     }
 
 }
