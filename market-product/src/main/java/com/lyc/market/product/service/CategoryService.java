@@ -3,6 +3,7 @@ package com.lyc.market.product.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lyc.common.utils.PageUtils;
 import com.lyc.market.product.entity.CategoryEntity;
+import com.lyc.market.product.vo.Catalog2Vo;
 
 import java.util.List;
 import java.util.Map;
@@ -22,8 +23,12 @@ public interface CategoryService extends IService<CategoryEntity> {
 
     void removeMenuByIds(List<Long> asList);
 
-    Long[] findCatelogPath(Long catelogId);
+    Long[] findCatalogPath(Long catalogId);
 
     void updateCascade(CategoryEntity category);
+
+    List<CategoryEntity> getLevel1Categories();
+
+    Map<String, List<Catalog2Vo>> getCatalogJson();
 }
 

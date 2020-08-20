@@ -1,6 +1,7 @@
 package com.lyc.market.product.service.impl;
 
 import com.lyc.market.product.service.CategoryBrandRelationService;
+import com.lyc.market.product.vo.Catalog2Vo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,15 +59,15 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
     }
 
     /**
-     * 找到catelogId的完整路径(三层)
+     * 找到catalogId的完整路径(三层)
      *
-     * @param catelogId
+     * @param catalogId
      * @return
      */
     @Override
-    public Long[] findCatelogPath(Long catelogId) {
+    public Long[] findCatalogPath(Long catalogId) {
         List<Long> paths = new ArrayList<>();
-        List<Long> parentPath = findParentPath(catelogId, paths);
+        List<Long> parentPath = findParentPath(catalogId, paths);
         Collections.reverse(parentPath);
 
         return parentPath.toArray(new Long[parentPath.size()]);
@@ -74,20 +75,65 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryDao, CategoryEntity
 
     /**
      * 级联更新所有关联的数据
+     *
      * @param category
      */
     @Transactional
     @Override
     public void updateCascade(CategoryEntity category) {
         this.updateById(category);
-        categoryBrandRelationService.updateCategory(category.getCatId(),category.getName());
+        categoryBrandRelationService.updateCategory(category.getCatId(), category.getName());
     }
 
-    private List<Long> findParentPath(Long catelogId, List<Long> paths) {
-        paths.add(catelogId);
-        CategoryEntity byId = this.getById(catelogId);
+    @Override
+    public List<CategoryEntity> getLevel1Categories() {
+        List<CategoryEntity> categoryEntities = baseMapper.selectList(
+                new QueryWrapper<CategoryEntity>().eq("parent_cid", 0));
+        return categoryEntities;
+    }
+
+    @Override
+    public Map<String, List<Catalog2Vo>> getCatalogJson() {
+        // 查出所有一级分类
+        List<CategoryEntity> level1Categories = getLevel1Categories();
+
+        // 封装数据
+        Map<String, List<Catalog2Vo>> parent_cid = level1Categories.stream().collect(
+                Collectors.toMap(k -> k.getCatId().toString(), v -> {
+                    List<CategoryEntity> categoryEntities = baseMapper.selectList(
+                            new QueryWrapper<CategoryEntity>().eq("parent_id", v.getCatId()));
+                    // 封装上面的结果
+                    List<Catalog2Vo> catalog2Vos = null;
+                    if (categoryEntities != null) {
+                        catalog2Vos = categoryEntities.stream().map(l2 -> {
+                            Catalog2Vo catalog2Vo = new Catalog2Vo(
+                                    v.getCatId().toString(), null, l2.getCatId().toString(), l2.getName());
+                            List<CategoryEntity> level3catalog = baseMapper.selectList(
+                                    new QueryWrapper<CategoryEntity>().eq("parent_cid", l2.getCatId()));
+                            if (level3catalog != null) {
+                                List<Catalog2Vo.Catalog3Vo> collect = level3catalog.stream().map(l3 -> {
+                                    Catalog2Vo.Catalog3Vo catalog3Vo = new Catalog2Vo.Catalog3Vo(
+                                            l2.getCatId().toString(), l3.getCatId().toString(), l3.getName());
+
+                                    return catalog3Vo;
+                                }).collect(Collectors.toList());
+                                catalog2Vo.setCatalog3List(collect);
+                            }
+
+                            return catalog2Vo;
+                        }).collect(Collectors.toList());
+                    }
+
+                    return catalog2Vos;
+                }));
+        return parent_cid;
+    }
+
+    private List<Long> findParentPath(Long catalogId, List<Long> paths) {
+        paths.add(catalogId);
+        CategoryEntity byId = this.getById(catalogId);
         if (byId.getParentCid() != 0) {
-            findParentPath(byId.getParentCid(),paths);
+            findParentPath(byId.getParentCid(), paths);
         }
         return paths;
     }

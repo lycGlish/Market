@@ -1,8 +1,5 @@
 package com.lyc.market.product;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
-import com.aliyun.oss.OSSClientBuilder;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lyc.market.product.entity.BrandEntity;
 import com.lyc.market.product.service.BrandService;
@@ -14,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -40,8 +34,8 @@ public class MarketProductApplicationTests {
 
     @Test
     public void testFindPath(){
-        Long[] catelogPath = categoryService.findCatelogPath(225L);
-        log.info("完整路径：{}", Arrays.asList(catelogPath));
+        Long[] catalogPath = categoryService.findCatalogPath(225L);
+        log.info("完整路径：{}", Arrays.asList(catalogPath));
     }
 
     @Test

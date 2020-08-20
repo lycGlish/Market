@@ -12,6 +12,9 @@ spring:
     name: market-product
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
+  thymeleaf:
+    cache: false
+
 
 
 mybatis-plus:
@@ -28,3 +31,4 @@ server:
 logging:
   level:
     com.lyc.market: debug
+

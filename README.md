@@ -32,3 +32,4 @@
  * oss  
  * vue+elementUI  
  * elasticsearch+kibana  
+ * thymeleaf  

@@ -40,7 +40,7 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
     }
 
     @Override
-    public PageUtils queryPage(Map<String, Object> params, Long catelogId) {
+    public PageUtils queryPage(Map<String, Object> params, Long catalogId) {
 
         String key = (String) params.get("key");
         QueryWrapper<AttrGroupEntity> wrapper = new QueryWrapper<AttrGroupEntity>();
@@ -50,14 +50,14 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
             });
         }
 
-        if (catelogId == 0) {
+        if (catalogId == 0) {
             IPage<AttrGroupEntity> page = this.page(
                     new Query<AttrGroupEntity>().getPage(params),
                     wrapper
             );
             return new PageUtils(page);
         } else {
-            wrapper.eq("catelog_id", catelogId);
+            wrapper.eq("catalog_id", catalogId);
             IPage<AttrGroupEntity> page = this.page(
                     new Query<AttrGroupEntity>().getPage(params),
                     wrapper
@@ -69,14 +69,14 @@ public class AttrGroupServiceImpl extends ServiceImpl<AttrGroupDao, AttrGroupEnt
 
     /**
      * 根据分类id查出所有的分组以及这些组里面的属性
-     * @param catelogId
+     * @param catalogId
      * @return
      */
     @Override
-    public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatelogId(long catelogId) {
+    public List<AttrGroupWithAttrsVo> getAttrGroupWithAttrsByCatalogId(long catalogId) {
         // 查询分组信息
         List<AttrGroupEntity> attrGroupEntities = this.list(
-                new QueryWrapper<AttrGroupEntity>().eq("catelog_id", catelogId));
+                new QueryWrapper<AttrGroupEntity>().eq("catalog_id", catalogId));
         // 查询所有属性
         List<AttrGroupWithAttrsVo> collect = attrGroupEntities.stream().map((group) -> {
             AttrGroupWithAttrsVo attrVo = new AttrGroupWithAttrsVo();
